@@ -33,17 +33,17 @@ var obj = { contract: { view: true, save: false }, superadmin: true }
 app.use(user(obj));
 
 app.get('/contract', access('contract.view').all(), function(req, res){
-  // success!
+  // success, we have contract.view
 });
 
 var perms = ['contract.view', 'contract.save'];
 app.post('/contract', access(perms).all(), function(req, res){
-  // forbidden
+  // forbidden, we dont have contract.save
 });
 
 var perms = ['superadmin', 'contract.update'];
 app.put('/contract', access(perms).any(), function(req, res){
-  // forbidden
+  // success, superadmin is true
 });
 ```
 
