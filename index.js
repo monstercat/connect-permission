@@ -2,27 +2,13 @@
 var dot = require('dot-component');
 var ap = require('ap-component');
 
-var exports = module.exports = function permission(obj, permissions){
-  return exports.all(obj, permissions);
-}
-
 function Permission(obj, permissions) {
   if (!(this instanceof Permission)) return new Permission(obj, permissions);
   this.obj = obj;
   this.permissions = permissions;
 }
 
-exports.Permission = Permission;
-
-exports.some =
-exports.any = function(obj, permissions){
-  return new Permission(obj, permissions).any();
-}
-
-exports.every =
-exports.all = function(obj, permissions){
-  return new Permission(obj, permissions).all();
-}
+var exports = module.exports = Permission;
 
 /**
  * If predicate `pred(obj, permissions)` doesn't match, return forbidden

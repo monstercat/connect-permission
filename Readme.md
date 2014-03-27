@@ -3,6 +3,8 @@
 
   Forbids entry to requests if a permission is not found in an object
 
+  [![Build Status](https://travis-ci.org/monstercat/connect-permission.png)](https://travis-ci.org/monstercat/connect-permission)
+
 ## Installation
 
   Install with npm
@@ -12,9 +14,7 @@
 ## Example
 
 ```js
-var permission = require('connect-permission');
-var access = permission.bind(null, get);
-access.some = permission.some.bind(null, get);
+var access = require('connect-permission').bind(null, get);
 
 function user(obj) {
   return function(req, res, next){
@@ -28,16 +28,21 @@ function get(req) {
   return req.user.permissions;
 }
 
-var obj = { contract: { view: false, edit: true } }
+var obj = { contract: { view: true, save: false }, superadmin: true }
 app.use(user(obj));
 
-app.get('/contract', access('contract.view'), function(req, res){
+app.get('/contract', access('contract.view').all(), function(req, res){
   // success!
 });
 
-var perms = ['contract.view', 'contract.edit'];
-app.post('/contract', access.some(perms), function(req, res){
-  // this will be forbidden
+var perms = ['contract.view', 'contract.save'];
+app.post('/contract', access(perms).all(), function(req, res){
+  // forbidden
+});
+
+var perms = ['superadmin', 'contract.update'];
+app.put('/contract', access(perms).any(), function(req, res){
+  // forbidden
 });
 ```
 

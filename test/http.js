@@ -3,10 +3,7 @@ var assert = require('better-assert')
 var request = require('supertest')
 var express = require('express')
 var ap = require('ap-component')
-var permissions = require('..');
-
-var access = permissions.bind(null, get);
-access.some = permissions.some.bind(null, get);
+var access = require('..').bind(null, get);
 
 describe('permission middleware', function(){
   var app;
@@ -19,7 +16,7 @@ describe('permission middleware', function(){
   it('403s on missing permission', function(done){
     var obj = { contract: { view: false } }
     app.use(user(obj));
-    app.get('/contract', access('contract.view'));
+    app.get('/contract', access('contract.view').all());
 
     request(app)
       .get('/contract')
@@ -30,7 +27,7 @@ describe('permission middleware', function(){
     var obj = { contract: { view: false, edit: true } }
     var perms = ['contract.view', 'contract.edit'];
     app.use(user(obj));
-    app.get('/contract', access(perms));
+    app.get('/contract', access(perms).all());
 
     request(app)
       .get('/contract')
@@ -41,7 +38,7 @@ describe('permission middleware', function(){
     var obj = { contract: { view: false, edit: true } }
     var perms = ['contract.view', 'contract.edit'];
     app.use(user(obj));
-    app.get('/contract', access.some(perms), function(req, res){
+    app.get('/contract', access(perms).any(), function(req, res){
       res.send(200);
     });
 
@@ -54,7 +51,7 @@ describe('permission middleware', function(){
     var obj = { contract: { view: false } }
     var perms = ['contract.view', 'contract.edit'];
     app.use(user(obj));
-    app.get('/contract', access.some(perms));
+    app.get('/contract', access(perms).some());
 
     request(app)
       .get('/contract')
