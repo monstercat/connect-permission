@@ -1,0 +1,22 @@
+{
+  "name": "connect-permission",
+  "description": "Checks to see if a user is allowed to view a resource",
+  "version": "0.0.1",
+  "repository": {
+    "url": "git://github.com/monstercat/connect-permission.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "dependencies": {
+    "dot-component": "*",
+    "ap-component": "1.0.1"
+  },
+  "devDependencies": {
+    "better-assert": "*",
+    "supertest": "*",
+    "express": ">=4",
+    "mocha": "*"
+  }
+}
