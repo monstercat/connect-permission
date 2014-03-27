@@ -15,6 +15,7 @@
 
 ```js
 var access = require('connect-permission').bind(null, get);
+var app = require('express')();
 
 function user(obj) {
   return function(req, res, next){
