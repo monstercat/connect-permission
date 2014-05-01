@@ -3,7 +3,7 @@
 
   Forbids entry to requests if a permission is not found in an object
 
-  [![Build Status](https://travis-ci.org/monstercat/connect-permission.png)](https://travis-ci.org/monstercat/connect-permission)
+  [![Build Status](https://travis-ci.org/monstercat/connect-permission.svg)](https://travis-ci.org/monstercat/connect-permission)
 
 ## Installation
 
