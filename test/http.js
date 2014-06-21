@@ -1,9 +1,9 @@
 
-var assert = require('better-assert')
-var request = require('supertest')
-var express = require('express')
-var ap = require('ap-component')
-var access = require('..').bind(null, get);
+var assert = require('better-assert');
+var request = require('supertest');
+var express = require('express');
+var ap = require('ap-component');
+var access = require('../').bind(null, get);
 
 describe('permission middleware', function(){
   var app;
@@ -13,29 +13,29 @@ describe('permission middleware', function(){
     app.set('env', 'test');
   });
 
-  it('403s on missing permission', function(done){
-    var obj = { contract: { view: false } }
+  it('401s on missing permission', function(done){
+    var obj = { contract: { view: false } };
     app.use(user(obj));
     app.get('/contract', access('contract.view').all());
 
     request(app)
       .get('/contract')
-      .expect(403, done)
+      .expect(401, done);
   });
 
-  it('403s on missing all permissions', function(done){
-    var obj = { contract: { view: false, edit: true } }
+  it('401s on missing all permissions', function(done){
+    var obj = { contract: { view: false, edit: true } };
     var perms = ['contract.view', 'contract.edit'];
     app.use(user(obj));
     app.get('/contract', access(perms).all());
 
     request(app)
       .get('/contract')
-      .expect(403, done)
+      .expect(401, done);
   });
 
   it('200s on having some permissions', function(done){
-    var obj = { contract: { view: false, edit: true } }
+    var obj = { contract: { view: false, edit: true } };
     var perms = ['contract.view', 'contract.edit'];
     app.use(user(obj));
     app.get('/contract', access(perms).any(), function(req, res){
@@ -44,18 +44,18 @@ describe('permission middleware', function(){
 
     request(app)
       .get('/contract')
-      .expect(200, done)
+      .expect(200, done);
   });
 
   it('doesnt crash when permission not in dict', function(done){
-    var obj = { contract: { view: false } }
+    var obj = { contract: { view: false } };
     var perms = ['contract.view', 'contract.edit'];
     app.use(user(obj));
     app.get('/contract', access(perms).some());
 
     request(app)
       .get('/contract')
-      .expect(403, done)
+      .expect(401, done);
   });
 
 });
