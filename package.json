@@ -1,7 +1,7 @@
 {
   "name": "connect-permission",
   "description": "Checks to see if a user is allowed to view a resource",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "repository": {
     "url": "git://github.com/monstercat/connect-permission.git"
   },
