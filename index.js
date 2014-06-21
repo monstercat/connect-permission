@@ -23,39 +23,39 @@ Permission.prototype.generic = function(pred) {
     var permissions = listify(ap(self.permissions, req));
 
     if (!pred(obj, permissions, req)) {
-      res.statusCode = 403;
+      res.statusCode = 401;
       return next(new Error("No permission for " + permissions.join(", ")));
     }
 
     return next();
-  }
-}
+  };
+};
 
 Permission.prototype.some = 
 Permission.prototype.any = function() {
   return this.generic(exports.checkAny);
-}
+};
 
 Permission.prototype.every = 
 Permission.prototype.all = function() {
   return this.generic(exports.checkAll);
-}
+};
 
 exports.checkAny = function(obj, permissions) {
   return permissions.some(function(permission){
     return exports.has(obj, permission);
   });
-}
+};
 
 exports.checkAll = function(obj, permissions) {
   return permissions.every(function(permission){
     return exports.has(obj, permission);
   });
-}
+};
 
 exports.has = function(obj, permission) {
   return dot.get(obj, permission) === true;
-}
+};
 
 /**
  * listify :: Either a [a] -> [a]
@@ -63,5 +63,5 @@ exports.has = function(obj, permission) {
 function listify(items){
   var array = Array.isArray(items);
   return array? items : items? [items] : null;
-};
+}
 
