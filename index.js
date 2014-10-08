@@ -2,10 +2,14 @@
 var dot = require('dot-component');
 var ap = require('ap-component');
 
-function Permission(obj, permissions) {
+function Permission(obj, permissions, opts) {
   if (!(this instanceof Permission)) return new Permission(obj, permissions);
+  opts = opts || {};
   this.obj = obj;
   this.permissions = permissions;
+  this.failureHandler = opts.failureHandler || function(req, res, next) {
+    res.status(403).end();
+  };
 }
 
 var exports = module.exports = Permission;
@@ -23,20 +27,19 @@ Permission.prototype.generic = function(pred) {
     var permissions = listify(ap(self.permissions, req));
 
     if (!pred(obj, permissions, req)) {
-      res.statusCode = 401;
-      return next(new Error("No permission for " + permissions.join(", ")));
+      return self.failureHandler(req, res, next);
     }
 
     return next();
   };
 };
 
-Permission.prototype.some = 
+Permission.prototype.some =
 Permission.prototype.any = function() {
   return this.generic(exports.checkAny);
 };
 
-Permission.prototype.every = 
+Permission.prototype.every =
 Permission.prototype.all = function() {
   return this.generic(exports.checkAll);
 };

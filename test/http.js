@@ -13,17 +13,17 @@ describe('permission middleware', function(){
     app.set('env', 'test');
   });
 
-  it('401s on missing permission', function(done){
+  it('403s on missing permission', function(done){
     var obj = { contract: { view: false } };
     app.use(user(obj));
     app.get('/contract', access('contract.view').all());
 
     request(app)
       .get('/contract')
-      .expect(401, done);
+      .expect(403, done);
   });
 
-  it('401s on missing all permissions', function(done){
+  it('403s on missing all permissions', function(done){
     var obj = { contract: { view: false, edit: true } };
     var perms = ['contract.view', 'contract.edit'];
     app.use(user(obj));
@@ -31,7 +31,7 @@ describe('permission middleware', function(){
 
     request(app)
       .get('/contract')
-      .expect(401, done);
+      .expect(403, done);
   });
 
   it('200s on having some permissions', function(done){
@@ -55,7 +55,7 @@ describe('permission middleware', function(){
 
     request(app)
       .get('/contract')
-      .expect(401, done);
+      .expect(403, done);
   });
 
 });
